@@ -2,7 +2,7 @@
 
 **See your AI agents work.** Not logs. Not dashboards. A living, breathing world where every tool call, every message, every decision becomes visible and spatial.
 
-![AgentWorld Demo](https://raw.githubusercontent.com/toneron2/agent-world/main/docs/demo.png)
+![AgentWorld Demo](docs/demo.png)
 
 ## What Is This?
 
