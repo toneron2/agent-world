@@ -12,6 +12,8 @@ AgentWorld makes it visible. Agents appear as characters in themed rooms. When o
 
 **Works with any provider, any framework, any orchestration pattern.** The system reads from a standard event stream — if your agents emit events, AgentWorld can render them.
 
+## Please see the extensive documentation in docs/manual.html
+
 ## Features
 
 ### Agents
