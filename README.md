@@ -1,5 +1,7 @@
 # AgentWorld
 
+[![Rust CI](https://github.com/toneron2/agent-world/actions/workflows/rust.yml/badge.svg)](https://github.com/toneron2/agent-world/actions/workflows/rust.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Release](https://img.shields.io/github/v/release/toneron2/agent-world)](https://github.com/toneron2/agent-world/releases) [![GitHub stars](https://img.shields.io/github/stars/toneron2/agent-world?style=social)](https://github.com/toneron2/agent-world/stargazers)
+
 **See your AI agents work.** Not logs. Not dashboards. A living, breathing world where every tool call, every message, every decision becomes visible and spatial.
 
 ![AgentWorld Demo](docs/demo.png)
