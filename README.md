@@ -1,5 +1,7 @@
 # AgentWorld v0.1.0
 
+[![Rust CI](https://github.com/toneron2/agent-world/actions/workflows/rust.yml/badge.svg)](https://github.com/toneron2/agent-world/actions/workflows/rust.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Release](https://img.shields.io/github/v/release/toneron2/agent-world)](https://github.com/toneron2/agent-world/releases) [![GitHub stars](https://img.shields.io/github/stars/toneron2/agent-world?style=social)](https://github.com/toneron2/agent-world/stargazers)
+
 **Spatial visualization for multi-agent AI systems.** Watch your agents think, communicate, and collaborate in a living world — not a log file.
 
 ![AgentWorld Overview](docs/images/hero.png)
@@ -48,6 +50,8 @@ AgentWorld reads from an event stream — tool calls, messages, status changes, 
 Everything renders in-browser via WebGL2. No install, no Electron, no native dependencies.
 
 ---
+
+## Please see the extensive documentation in docs/manual.html
 
 ## Features
 
