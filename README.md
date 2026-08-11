@@ -1,4 +1,4 @@
-# AgentWorld v0.1.0
+# AgentWorld
 
 [![Rust CI](https://github.com/toneron2/agent-world/actions/workflows/rust.yml/badge.svg)](https://github.com/toneron2/agent-world/actions/workflows/rust.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Release](https://img.shields.io/github/v/release/toneron2/agent-world)](https://github.com/toneron2/agent-world/releases) [![GitHub stars](https://img.shields.io/github/stars/toneron2/agent-world?style=social)](https://github.com/toneron2/agent-world/stargazers)
 
@@ -9,6 +9,26 @@
 AgentWorld transforms invisible AI orchestration into something you can *point at*. Agents appear as distinct characters in themed rooms. Messages arc visibly between them. Tool invocations flash. Errors turn red. When five agents are coordinating across three workspaces, you see the whole picture at a glance.
 
 **Provider-agnostic.** If your agents emit structured events, AgentWorld can render them.
+
+> **📖 Full documentation:** [`docs/manual.html`](docs/manual.html) — a self-contained manual covering
+> all 27 sections in depth, with 24 annotated screenshots. This README is the overview; the manual
+> is the reference.
+
+**Try it in 30 seconds:** [Demo mode](#demo-mode-no-setup) runs offline with 5 scripted agents — no
+event source, no configuration.
+
+---
+
+## Contents
+
+- [Screenshots](#screenshots)
+- [What It Does](#what-it-does)
+- [Features](#features)
+- [Quick Start](#quick-start) · [Demo mode](#demo-mode-no-setup) · [Live mode](#live-mode-connect-to-real-agents) · [Controls](#controls)
+- [Architecture](#architecture)
+- [Connecting Your Agents](#connecting-your-agents)
+- [Documentation](#documentation)
+- [Version](#version) · [License](#license)
 
 ---
 
@@ -50,8 +70,6 @@ AgentWorld reads from an event stream — tool calls, messages, status changes, 
 Everything renders in-browser via WebGL2. No install, no Electron, no native dependencies.
 
 ---
-
-## Please see the extensive documentation in docs/manual.html
 
 ## Features
 
@@ -224,7 +242,16 @@ This repository includes a **comprehensive manual** at [`docs/manual.html`](docs
 
 ## Version
 
-**v0.1.0** — First public release. ~5,000 lines of Rust, ~500 lines of TypeScript/TSX. 10 engine plugins, 19 event types, 6 core tests.
+**v0.1.0** — First public release.
+
+| | |
+|---|---|
+| Rust | ~4,400 lines across 2 crates |
+| TypeScript/TSX | ~1,400 lines (746 frontend, 678 bridge) |
+| Engine plugins | 10 |
+| Event types | 19 |
+| Core tests | 6 |
+| HUD bundle | 31 KB built |
 
 ---
 
