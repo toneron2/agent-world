@@ -1,262 +1,137 @@
 # AgentWorld
 
-[![Rust CI](https://github.com/toneron2/agent-world/actions/workflows/rust.yml/badge.svg)](https://github.com/toneron2/agent-world/actions/workflows/rust.yml) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Release](https://img.shields.io/github/v/release/toneron2/agent-world)](https://github.com/toneron2/agent-world/releases) [![GitHub stars](https://img.shields.io/github/stars/toneron2/agent-world?style=social)](https://github.com/toneron2/agent-world/stargazers)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Release](https://img.shields.io/github/v/release/toneron2/agent-world)](https://github.com/toneron2/agent-world/releases)
 
-**Spatial visualization for multi-agent AI systems.** Watch your agents think, communicate, and collaborate in a living world — not a log file.
+**Spatial visualization for multi-agent AI systems.** It works. It was the wrong answer. This
+README is the postmortem, which is the only part still worth reading.
 
 https://youtu.be/wxGq3uq7hfs?is=kwMKqe64EKYzWcTN
 
 ![AgentWorld Overview](docs/images/hero.png)
 
-AgentWorld transforms invisible AI orchestration into something you can *point at*. Agents appear as distinct characters in themed rooms. Messages arc visibly between them. Tool invocations flash. Errors turn red. When five agents are coordinating across three workspaces, you see the whole picture at a glance.
-
-**Provider-agnostic.** If your agents emit structured events, AgentWorld can render them.
-
-> **📖 Full documentation:** [`docs/manual.html`](docs/manual.html) — a self-contained manual covering
-> all 27 sections in depth, with 24 annotated screenshots. This README is the overview; the manual
-> is the reference.
-
-**Try it in 30 seconds:** [Demo mode](#demo-mode-no-setup) runs offline with 5 scripted agents — no
-event source, no configuration.
-
 ---
 
-## Contents
+## The idea
 
-- [Screenshots](#screenshots)
-- [What It Does](#what-it-does)
-- [Features](#features)
-- [Quick Start](#quick-start) · [Demo mode](#demo-mode-no-setup) · [Live mode](#live-mode-connect-to-real-agents) · [Controls](#controls)
-- [Architecture](#architecture)
-- [Connecting Your Agents](#connecting-your-agents)
-- [Documentation](#documentation)
-- [Version](#version) · [License](#license)
+I watched Moonshot AI debut K2.5. Somewhere in it was a short, dark clip of agent swarms
+actually interacting, visually, in motion. Not a log file. Not a trace viewer. A picture of a
+system thinking.
 
----
+My immediate reaction was "I can do better than that."
 
-## Screenshots
+I'd also just worked through IndyDevDan's
+[The One Agent to RULE them ALL](https://youtu.be/p0mrXfwAbCg), which puts real-time
+observability next to the orchestrator and agent lifecycle management as one of three pillars
+of multi-agent work. That framing is correct. If five agents are running across three
+workspaces, you should be able to point at the one that is stuck.
 
-### Agents at Work — Sprites, Status Rings, Thought Bubbles
-![Agent sprites and animations](docs/images/agentworld-sprite-animations.png)
-*Each role has a unique pixel art sprite. Status rings pulse with state — thinking, acting, waiting, error. Thought bubbles show what each agent is considering.*
+So: make the agents visible. And if you are making them visible anyway, why settle for boxes
+and arrows?
 
-### Inspector Panel — Agent Details and Inventory
-![Inspector and inventory](docs/images/agentworld-inventory.png)
-*Click any agent to inspect status, health, energy, tools used, current thought, and carried artifacts. Artifacts have kind-specific icons and quality indicators.*
+## The wrong turn
 
-### Live Mode — Real Agent Sessions
-![Live multi-team visualization](docs/images/agentworld-live-multiteam.png)
-*Connected to a live event stream. Three agents across two teams, event log scrolling in real-time. The green dot confirms a live bridge connection.*
+Make it Zelda.
 
-### Rooms and Portals — Spatial Navigation
-![Portal particle effects](docs/images/agentworld-portal-particles.png)
-*Agents traverse rooms through portals with a 3-phase animation (shrink, spin, teleport) and particle burst. Each room has its own color theme and ambient particles.*
+Different characters in different roles. Rooms you walk between. Artifacts you pick up, carry,
+and hand off. NPCs transacting in a little economy of sprites doing your work.
 
-### Full Interface — Roster, World, Event Log
-![React shell with full HUD](docs/images/agentworld-react-shell.png)
-*The complete interface: agent roster (left), spatial world view (center), timestamped event log (right), minimap (bottom).*
+I built that. 7 role sprites, 5 animation states, 19 event types, 10 Bevy plugins compiled to
+WASM, a SQLite bridge, a Preact HUD, 8 procedural Web Audio sounds, three themed rooms with
+ambient particles, portal transitions with particle bursts, and a 27-section manual with 24
+annotated screenshots.
 
----
+It worked. It added nothing.
 
-## What It Does
+## Why
 
-AgentWorld reads from an event stream — tool calls, messages, status changes, artifact transfers — and projects them into a spatial, real-time visualization running in your browser.
+The question I actually had was "which agent is stuck, and on what." AgentWorld answered it by
+making you watch a sprite walk across a room. The scrolling text list in the right-hand panel
+was the only part anyone ever read. Everything else was an expensive way of not reading it.
 
-- **Agents** become characters with role-specific sprites, animated status rings, health/energy bars, movement trails, and thought bubbles
-- **Messages** become visible projectiles arcing between sender and receiver, with content preview
-- **Tool use** produces flash effects on invocation and colored result indicators (green check, red X)
-- **Artifacts** are visible objects that agents create, carry, inspect, and hand off to each other
-- **Rooms** are themed workspaces (blue/purple/green) with portals that agents traverse with particle effects
-- **Teams** cluster into separate spatial bands so multi-team sessions stay readable
-
-Everything renders in-browser via WebGL2. No install, no Electron, no native dependencies.
-
----
-
-## Features
-
-### Agents
-- 7 distinct role-based pixel art sprites (16x16, runtime-generated)
-- 5 animation states: idle bobble, thinking orbit, action flash, waiting sway, error shake
-- Breathing status rings color-coded by state
-- Health and energy bars, movement trails, thought bubbles
-
-### Communication
-- Message projectiles with arcing trajectories and content preview
-- Connection lines revealing communication patterns
-- Broadcast visualization — multi-target fan-out
-
-### Tools and Artifacts
-- Tool invocation flash effects with success/failure indicators
-- 6 artifact kinds: Document, Code, Data, Image, Plan, MessageBundle
-- Inventory system with kind icons and quality bars
-- Artifact transfers visible between agents
-
-### Rooms and Navigation
-- Themed rooms: workspace (blue), review (purple), deploy (green)
-- Distinct floor tiles, borders, corner decorations per theme
-- Portal transitions with 3-phase animation and particle effects
-- Ambient floating particles in room-themed colors
-- Multi-team clustering with separate horizontal bands
-
-### HUD (Preact Overlay)
-- Agent roster grouped by team with clickable entries and status dots
-- Scrollable event log — timestamped, color-coded, 200-entry buffer
-- Inspector panel: name, role, status, room, health/energy, tools, thought, inventory
-- Minimap with proportional agent dots
-- Live connection status indicator synced from the engine
-
-### Sound
-- 8 procedural sound types via Web Audio API (no audio files needed)
-- Spawn, despawn, portal, tool use/ok/fail, message ping, error alarm
-- M key mute toggle
-
-### Bridge Server
-- SQLite poller (500ms interval) — reads from any SQLite event database
-- State snapshots for late-joining clients
-- `--replay` flag to replay the last hour of events
-- `--team` filter for single-team focus
-- Auto-spawns agents from unknown tool_use events
-- Per-team color palettes (5 hue families)
-
-### Demo Mode
-- 5 agents across 3 rooms running a 16-step narrative cycle
-- Full workflow: research, code, review, bug found, fix, re-test, deploy
-- Portal warps and artifact handoffs — no setup, runs offline
-
----
-
-## Quick Start
-
-### Prerequisites
-
-- [Rust](https://rustup.rs/) 1.89 (pinned in `rust-toolchain.toml`)
-- WASM target: `rustup target add wasm32-unknown-unknown`
-- [Trunk](https://trunkrs.dev/): `cargo install trunk`
-- [Bun](https://bun.sh/) (for bridge server and frontend build)
-
-### Demo Mode (no setup)
-
-```bash
-cd frontend && bun install && cd ..
-trunk serve --address 0.0.0.0 --port 8080
-# Open http://localhost:8080
-```
-
-### Live Mode (connect to real agents)
-
-```bash
-# Terminal 1: Bridge server
-bun run bridge/server.ts --replay
-
-# Terminal 2: WASM renderer
-trunk serve --address 0.0.0.0 --port 8080
-
-# Open http://localhost:8080/?ws=ws://localhost:9090/ws
-```
-
-### Service Scripts
-
-```bash
-./bin/start.sh          # Demo mode
-./bin/start.sh --live   # Demo + bridge (live data)
-./bin/stop.sh           # Stop all
-./bin/status.sh         # Check running processes
-```
-
-### Controls
-
-| Key | Action |
-|-----|--------|
-| Scroll | Zoom in/out |
-| Middle mouse drag | Pan camera |
-| 1-9 | Follow agent by index |
-| H | Toggle help overlay |
-| M | Toggle sound mute |
-| Click roster entry | Inspect agent details + inventory |
-
----
-
-## Architecture
-
-```
-agent-world/
-├── crates/
-│   ├── core/           # Pure Rust types + event-sourced state (zero framework deps)
-│   └── game/           # Bevy 0.18 rendering — 10 plugins compiled to WASM
-├── bridge/
-│   └── server.ts       # SQLite → WorldEvents translator (Bun + WebSocket)
-├── frontend/
-│   └── src/            # Preact HUD overlay (28KB built)
-└── index.html          # WASM entry point
-```
-
-**Core** — Provider-agnostic types and an event-sourced store. World state is a pure projection of the event stream. Replay and time-travel come free.
-
-**Engine** — 10 plugins (world, agents, visuals, camera, HUD, events, adapter, sprites, sound, debug) compiled to WASM via WebGL2. Runs in any modern browser.
-
-**Bridge** — Translates your event format into 19 WorldEvent types over WebSocket. Ships with a SQLite bridge; write your own for any event source.
-
-**Frontend** — Preact overlay for HUD panels. The engine forwards events via `window.__agentworld_event()` and syncs state via `window.__agentworld_sync()`.
-
-| Component | Technology |
-|-----------|-----------|
-| Core types | Rust (no framework deps) |
-| Engine | Bevy 0.18 + WebGL2 |
-| WASM build | Trunk |
-| HUD overlay | Preact + @preact/signals |
-| Frontend build | Bun |
-| Bridge server | Bun + SQLite |
-| Sound | Web Audio API (procedural) |
-| Sprites | Runtime-generated from const pixel arrays |
-
----
-
-## Connecting Your Agents
-
-AgentWorld visualizes any system that emits structured events. The included bridge reads from SQLite:
-
-```sql
-CREATE TABLE events (
-  id INTEGER PRIMARY KEY,
-  hook_event_type TEXT,
-  event_category TEXT,
-  team_name TEXT,
-  agent_name TEXT,
-  agent_type TEXT,
-  payload TEXT,       -- JSON
-  summary TEXT,
-  timestamp INTEGER
-);
-```
-
-For other event sources, write a bridge that emits any of the 19 WorldEvent types over WebSocket. See `crates/core/src/events.rs` for the full type definitions.
-
----
-
-## Documentation
-
-This repository includes a **comprehensive manual** at [`docs/manual.html`](docs/manual.html) — a self-contained, dark-themed HTML document covering all 27 sections of AgentWorld in detail, with 24 annotated screenshots. The manual is the authoritative reference for every feature, configuration option, keyboard shortcut, and architectural decision.
-
-**Start there.** This README provides an overview; the manual provides depth.
-
----
-
-## Version
-
-**v0.1.0** — First public release.
+The numbers are the honest summary:
 
 | | |
 |---|---|
-| Rust | ~4,400 lines across 2 crates |
-| TypeScript/TSX | ~1,400 lines (746 frontend, 678 bridge) |
-| Engine plugins | 10 |
-| Event types | 19 |
-| Core tests | 6 |
-| HUD bundle | 31 KB built |
+| Source | ~5,800 lines (4,400 Rust, 1,400 TypeScript) |
+| Build artifacts on disk | **17 GB** |
+| Part of the UI that answered the question | the text list |
+
+A game engine, a WASM toolchain, a pinned Rust version and a WebGL2 context, to render
+information that `tail -f` renders for free.
+
+The metaphor is the actual mistake, not the implementation. A game world is built to reward a
+player who has hours to explore it. Observability is built for an operator who has four
+seconds and one question. I copied the architecture of the first thing while needing the
+second, and the copy was worse at being a game than Zelda and worse at being an instrument
+than a log file.
+
+Then there is the unglamorous part. To see your agents you install Rust 1.89, add a WASM
+target, install Trunk, install Bun, start two servers and open a URL with a query parameter.
+Nobody does that to check on a job.
+
+## What replaced it
+
+One HTML page. A connection dot, a live activity strip, and a searchable event stream showing
+agent name, tool, event type and timestamp. No sprites, no rooms, no sound, no build step. It
+answers the question on sight, and it is boring.
+
+That is what the 17 GB bought: **observability is a reading problem, not a rendering problem.**
+The interesting-looking version of the answer was not the useful one.
+
+The Moonshot clip was beautiful. It was also a rendering of a system rather than an instrument
+for operating one. Those are different products, and I built the first while believing it was
+the second. The whole thing went up in five days, 27 February to 3 March 2026, which is the
+part that should have been the warning: nothing that answers a real operational question is
+that easy to finish.
 
 ---
 
-## License
+## What is actually in here
 
-MIT License. Copyright 2026 TODOMODO.IO AGENCY LLC. See [LICENSE](LICENSE) for details.
+If you want the code, it builds and runs. Demo mode needs no event source.
+
+```
+agent-world/
+├── crates/core/     # Provider-agnostic types + event-sourced state, zero framework deps
+├── crates/game/     # Bevy 0.18 rendering, 10 plugins, compiled to WASM via WebGL2
+├── bridge/          # SQLite -> WorldEvent translator (Bun + WebSocket)
+└── frontend/src/    # Preact HUD overlay, 31 KB built
+```
+
+World state is a pure projection of the event stream, so replay and time travel come free.
+That part was a good idea and is the piece worth stealing.
+
+```bash
+rustup target add wasm32-unknown-unknown && cargo install trunk
+cd frontend && bun install && cd ..
+trunk serve --address 0.0.0.0 --port 8080     # demo mode, 5 scripted agents, offline
+```
+
+Live mode wants `bun run bridge/server.ts --replay` alongside it, then
+`http://localhost:8080/?ws=ws://localhost:9090/ws`. The bridge reads any SQLite table shaped
+like `(hook_event_type, event_category, team_name, agent_name, agent_type, payload, summary,
+timestamp)`. For anything else, emit the 19 `WorldEvent` types from
+[`crates/core/src/events.rs`](crates/core/src/events.rs) over a WebSocket.
+
+The full 27-section manual is [`docs/manual.html`](docs/manual.html), self-contained, dark
+themed, 24 screenshots. It is a genuinely thorough document about a thing that should not
+exist.
+
+### Screenshots
+
+| | |
+|---|---|
+| ![Sprites](docs/images/agentworld-sprite-animations.png) | Role sprites, status rings, thought bubbles |
+| ![Inventory](docs/images/agentworld-inventory.png) | Inspector panel with carried artifacts |
+| ![Portals](docs/images/agentworld-portal-particles.png) | Portal transitions between rooms |
+| ![Shell](docs/images/agentworld-react-shell.png) | Roster, world view, event log, minimap |
+
+---
+
+## Status
+
+Archived experiment. v0.1.0 is the only release and there will not be another. No issues, no
+roadmap, no maintenance. It stays public because the postmortem is more useful than the code
+and deleting it would delete the lesson too.
+
+MIT. Copyright 2026 TODOMODO.IO AGENCY LLC. Take any of it.
