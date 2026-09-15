@@ -1,10 +1,11 @@
 name: Rust
 
+# Manual only. This project is retired -- see README.md -- and its rust-toolchain.toml
+# pins 1.89 while a transitive dependency (ordered-float 5.5.0) now requires 1.90, so
+# every push failed and mailed a failure notice about a build nobody intends to fix.
+# Run it by hand from the Actions tab if the code is ever revived.
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
 
 env:
   CARGO_TERM_COLOR: always
