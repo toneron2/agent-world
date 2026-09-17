@@ -5,6 +5,8 @@
 **Spatial visualization for multi-agent AI systems.** It works. It was the wrong answer. This
 README is the postmortem, which is the only part still worth reading.
 
+**Status: A failed experiment, kept public.**
+
 https://youtu.be/wxGq3uq7hfs?is=kwMKqe64EKYzWcTN
 
 ![AgentWorld Overview](docs/images/hero.png)
